@@ -1,0 +1,32 @@
+﻿@model IEnumerable<DisasterAlleviationFoundation.Models.IncidentReport>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Reported Disaster Incidents</h2>
+    <a asp-action="Create" class="btn btn-success mb-3">Report New Incident</a>
+
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Reporter</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model)
+            {
+                <tr>
+                    <td>@report.DisasterType</td>
+                    <td>@report.Location</td>
+                    <td>@report.Date.ToShortDateString()</td>
+                    <td>@report.ReportedBy</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@report.Id" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,16 @@
+﻿@model DisasterAlleviationFoundation.Models.IncidentReport
+
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-center">Incident Details</h2>
+
+        <p><strong>Disaster Type:</strong> @Model.DisasterType</p>
+        <p><strong>Location:</strong> @Model.Location</p>
+        <p><strong>Description:</strong> @Model.Description</p>
+        <p><strong>Date:</strong> @Model.Date.ToShortDateString()</p>
+        <p><strong>Reporter:</strong> @Model.ReportedBy</p>
+        <p><strong>Email:</strong> @Model.ReporterEmail</p>
+
+        <a asp-action="Index" class="btn btn-outline-secondary mt-3">Back to Reports</a>
+    </div>
+</div>
