@@ -5,6 +5,7 @@ namespace DisasterAlleviationFoundation.Models
 {
     public class Donation
     {
+        [Key]
         public int DonationID { get; set; }
 
         [Required]
@@ -20,5 +21,10 @@ namespace DisasterAlleviationFoundation.Models
 
         [Required]
         public DateTime Date { get; set; }
+
+        // Foreign key to User
+        [Required]
+        public string UserID { get; set; }
+        public virtual User User { get; set; }
     }
 }

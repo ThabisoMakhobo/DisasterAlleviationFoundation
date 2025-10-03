@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DisasterAlleviationFoundation.Models
 {
-    public class Volunteer
-    {
-        public int VolunteerID { get; set; }
+public class Volunteer
+{
+    [Key]
+    public int VolunteerID { get; set; }
 
-        [Required]
-        public string UserID { get; set; }
+    // Foreign key to Identity User (string ID, not int!)
+    [Required]
+    public string UserID { get; set; }
 
-        public User User { get; set; }
 
-        public ICollection<TaskEntity> Tasks { get; set; }
-    }
 }

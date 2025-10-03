@@ -1,18 +1,17 @@
-﻿using DisasterAlleviationFoundation.Models;
-
-public class Distribution
+﻿
+namespace DisasterAlleviationFoundation.Models
 {
-    public int DistributionID { get; set; }
-    public int CrisisID { get; set; }
-    public int ResourceID { get; set; }
-    public int Quantity { get; set; }
-    public DateTime Date { get; set; }
+    public class Distribution
+    {
+        [Key]
+        public int DistributionID { get; set; }
 
-    // Navigation properties
-    public Crisis Crisis { get; set; }
-    public Resource Resource { get; set; }
+        [Required]
+        public int CrisisID { get; set; }
+        public virtual Crisis Crisis { get; set; }
 
-    // Optional: link to Donation
-    public int? DonationID { get; set; }
-    public Donation Donation { get; set; }
+        [Required]
+        public int ResourceID { get; set; }
+
+
 }
