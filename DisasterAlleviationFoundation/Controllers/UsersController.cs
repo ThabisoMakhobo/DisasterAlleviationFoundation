@@ -1,4 +1,5 @@
-﻿using DisasterAlleviationFoundation.Models;
+﻿using DisasterAlleviationFoundation.Data;
+using DisasterAlleviationFoundation.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,21 +10,21 @@ namespace DisasterAlleviationFoundation.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly GiftOfTheGiversDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(GiftOfTheGiversDbContext context, UserManager<User> userManager)
         {
+            _context = context;
             _userManager = userManager;
         }
 
-        // GET: Users
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
             return View(users);
         }
 
-        // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
@@ -34,96 +35,70 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
-        // POST: Users/Create
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var model = new RegisterViewModel
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                Skills = user.Skills
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Email,Role,PhoneNumber,Skills")] User user, string password)
+        public async Task<IActionResult> Edit(string id, RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return View(user);
+            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (!ModelState.IsValid) return View(model);
 
-            var result = await _userManager.CreateAsync(user, password);
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            user.Name = model.Name;
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            user.Skills = model.Skills;
+            user.Role = model.Role;
+
+            var result = await _userManager.UpdateAsync(user);
+
             if (result.Succeeded)
-            {
-                if (!string.IsNullOrEmpty(user.Role))
-                    await _userManager.AddToRoleAsync(user, user.Role);
-
                 return RedirectToAction(nameof(Index));
-            }
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
 
-            return View(user);
+            return View(model);
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Email,PhoneNumber,Skills,Role")] User updatedUser)
-        {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
-
-            if (!ModelState.IsValid) return View(updatedUser);
-
-            // ✅ Update properties
-            user.Name = updatedUser.Name;
-            user.Email = updatedUser.Email;
-            user.UserName = updatedUser.Email;
-            user.PhoneNumber = updatedUser.PhoneNumber;
-            user.Skills = updatedUser.Skills;
-            user.Role = updatedUser.Role; // ✅ FIX: Save role into User table
-
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError("", error.Description);
-                return View(updatedUser);
-            }
-
-            // ✅ Sync with Identity roles
-            var roles = await _userManager.GetRolesAsync(user);
-            if (!roles.Contains(updatedUser.Role))
-            {
-                await _userManager.RemoveFromRolesAsync(user, roles);
-                if (!string.IsNullOrEmpty(updatedUser.Role))
-                    await _userManager.AddToRoleAsync(user, updatedUser.Role);
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
+
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
+
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user != null) await _userManager.DeleteAsync(user);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
             return RedirectToAction(nameof(Index));
         }
     }

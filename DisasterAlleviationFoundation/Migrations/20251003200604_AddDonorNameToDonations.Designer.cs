@@ -4,6 +4,7 @@ using DisasterAlleviationFoundation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DisasterAlleviationFoundation.Migrations
 {
     [DbContext(typeof(GiftOfTheGiversDbContext))]
-    partial class GiftOfTheGiversDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251003200604_AddDonorNameToDonations")]
+    partial class AddDonorNameToDonations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

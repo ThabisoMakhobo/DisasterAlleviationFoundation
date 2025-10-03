@@ -20,7 +20,6 @@ namespace DisasterAlleviationFoundation.Controllers
             _roleManager = roleManager;
         }
 
-        // ----------------- Register -----------------
         [HttpGet]
         public IActionResult Register() => View();
 
@@ -35,25 +34,20 @@ namespace DisasterAlleviationFoundation.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Name = model.Name,
-                    Skills = model.Skills // ✅ keep skills
+                    Skills = model.Skills
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    // ✅ Ensure role exists (optional if roles are seeded already)
                     if (!await _roleManager.RoleExistsAsync(model.Role))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(model.Role));
                     }
 
-                    // ✅ Assign role
                     await _userManager.AddToRoleAsync(user, model.Role);
-
-                    // ✅ Sign in new user
                     await _signInManager.SignInAsync(user, isPersistent: false);
-
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -63,7 +57,6 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(model);
         }
 
-        // ----------------- Login -----------------
         [HttpGet]
         public IActionResult Login() => View();
 
@@ -84,7 +77,6 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(model);
         }
 
-        // ----------------- Logout -----------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

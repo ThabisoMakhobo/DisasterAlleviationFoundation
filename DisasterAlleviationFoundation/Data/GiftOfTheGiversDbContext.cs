@@ -17,41 +17,59 @@ namespace DisasterAlleviationFoundation.Data
         public DbSet<Distribution> Distributions { get; set; }
         public DbSet<IncidentReport> IncidentReports { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        protected override void OnModelCreating(ModelBuilder builder)
-{
-    base.OnModelCreating(builder);
+            // TaskEntity → Crisis
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.Crisis)
+                .WithMany(c => c.Tasks)
+                .HasForeignKey(t => t.CrisisID)
+                .OnDelete(DeleteBehavior.Restrict); // Avoid multiple cascade paths
 
-    // TaskEntity configuration
-    builder.Entity<TaskEntity>()
-        .HasKey(t => t.TaskID); // Ensures EF knows TaskID is the PK
+            // TaskEntity → Volunteer (optional)
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.Volunteer)
+                .WithMany(v => v.Tasks)
+                .HasForeignKey(t => t.VolunteerID)
+                .OnDelete(DeleteBehavior.Restrict);
 
-    builder.Entity<TaskEntity>()
-        .HasOne(t => t.Crisis)
-        .WithMany(c => c.Tasks)
-        .HasForeignKey(t => t.CrisisID)
-        .OnDelete(DeleteBehavior.Cascade);
+            // Donation relationships
+            modelBuilder.Entity<Donation>()
+                .HasOne(d => d.User)
+                .WithMany(u => u.Donations)
+                .HasForeignKey(d => d.UserID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
-    builder.Entity<TaskEntity>()
-        .HasOne(t => t.Volunteer)
-        .WithMany(v => v.Tasks)
-        .HasForeignKey(t => t.VolunteerID)
-        .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Donation>()
+                .Property(d => d.Amount)
+                .HasColumnType("decimal(18,2)");
 
-    // Volunteer configuration
-    builder.Entity<Volunteer>()
-        .HasOne(v => v.User)
-        .WithOne(u => u.Volunteer)
-        .HasForeignKey<Volunteer>(v => v.UserID)
-        .IsRequired();
+            // IncidentReport relationships
+            modelBuilder.Entity<IncidentReport>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.IncidentReports)
+                .HasForeignKey(r => r.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
-    // Donation configuration
-    builder.Entity<Donation>()
-        .HasOne(d => d.User)
-        .WithMany(u => u.Donations)
-        .HasForeignKey(d => d.UserID)
-        .IsRequired();
-}
+            // Distribution relationships
+            modelBuilder.Entity<Distribution>()
+                .HasOne(d => d.Crisis)
+                .WithMany(c => c.Distributions)
+                .HasForeignKey(d => d.CrisisID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Volunteer relationships
+            modelBuilder.Entity<Volunteer>()
+                .HasOne(v => v.User)
+                .WithOne(u => u.Volunteer)
+                .HasForeignKey<Volunteer>(v => v.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
 
     }
 }

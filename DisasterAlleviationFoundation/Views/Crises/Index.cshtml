@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DisasterAlleviationFoundation.Models.Crisis>
+
+@{
+    ViewData["Title"] = "Crises";
+}
+
+<h2>Crises List</h2>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Crisis</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var crisis in Model)
+        {
+            <tr>
+                <td>@crisis.Type</td>
+                <td>@crisis.Location</td>
+                <td>@crisis.Date.ToShortDateString()</td>
+                <td>@crisis.Status</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@crisis.CrisisID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@crisis.CrisisID" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@crisis.CrisisID" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,18 @@
+﻿@model DisasterAlleviationFoundation.Models.Crisis
+
+@{
+    ViewData["Title"] = "Crisis Details";
+}
+
+<h2>@Model.Type - Details</h2>
+
+<div>
+    <strong>Location:</strong> @Model.Location <br />
+    <strong>Date:</strong> @Model.Date.ToShortDateString() <br />
+    <strong>Status:</strong> @Model.Status
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.CrisisID" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</p>

@@ -6,22 +6,22 @@
             <div class="card shadow-sm p-4">
                 <h2 class="text-center mb-4">Report Incident</h2>
 
-                <form asp-action="Report" method="post">
+                <form asp-action="Create" method="post">
                     <div class="mb-3">
                         <label asp-for="DisasterType" class="form-label"></label>
-                        <input asp-for="DisasterType" class="form-control" />
+                        <input asp-for="DisasterType" class="form-control" placeholder="e.g., Flood, Fire, Earthquake" />
                         <span asp-validation-for="DisasterType" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="Location" class="form-label"></label>
-                        <input asp-for="Location" class="form-control" />
+                        <input asp-for="Location" class="form-control" placeholder="Enter location" />
                         <span asp-validation-for="Location" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="Description" class="form-label"></label>
-                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide incident details"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 

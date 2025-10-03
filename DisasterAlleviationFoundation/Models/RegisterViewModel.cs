@@ -5,25 +5,24 @@ namespace DisasterAlleviationFoundation.Models
     public class RegisterViewModel
     {
         [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
         [StringLength(100)]
         public string Name { get; set; }
 
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string Skills { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Please select a role")]
-        public string Role { get; set; } // Volunteer, Donor, Admin
-
-        public string? Skills { get; set; } // optional for volunteers
+        [Required]
+        public string Role { get; set; }  // "Admin" or "User"
     }
 }

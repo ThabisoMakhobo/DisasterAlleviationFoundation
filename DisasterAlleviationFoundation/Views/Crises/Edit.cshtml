@@ -1,0 +1,37 @@
+﻿@model DisasterAlleviationFoundation.Models.Crisis
+
+@{
+    ViewData["Title"] = "Edit Crisis";
+}
+
+<h2>Edit Crisis</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="CrisisID" />
+    <div class="form-group">
+        <label>Type</label>
+        <input asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        <input asp-for="Date" type="date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

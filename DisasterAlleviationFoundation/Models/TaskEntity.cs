@@ -5,19 +5,27 @@ namespace DisasterAlleviationFoundation.Models
 {
     public class TaskEntity
     {
-        [Key]  // Explicitly marks this as the primary key
+        [Key]
         public int TaskID { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [StringLength(500)]
         public string Description { get; set; }
 
-        // Foreign Keys
+        // Foreign key to Crisis
+        [Required]
         public int CrisisID { get; set; }
-        public int VolunteerID { get; set; }
 
-        // Navigation properties
+        [ForeignKey("CrisisID")]
         public Crisis Crisis { get; set; }
-        public Volunteer Volunteer { get; set; }
+
+        // Optional: Assign a volunteer
+        public int? VolunteerID { get; set; }
+
+        [ForeignKey("VolunteerID")]
+        public Volunteer? Volunteer { get; set; }
+
+        // Optional: Track completion status
+        public bool IsCompleted { get; set; } = false;
     }
 }

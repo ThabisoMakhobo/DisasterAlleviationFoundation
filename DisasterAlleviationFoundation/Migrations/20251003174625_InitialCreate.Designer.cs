@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DisasterAlleviationFoundation.Migrations
 {
     [DbContext(typeof(GiftOfTheGiversDbContext))]
-    [Migration("20251002173246_InitialIdentitySetup")]
-    partial class InitialIdentitySetup
+    [Migration("20251003174625_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,32 @@ namespace DisasterAlleviationFoundation.Migrations
                     b.ToTable("Crises");
                 });
 
+            modelBuilder.Entity("DisasterAlleviationFoundation.Models.Distribution", b =>
+                {
+                    b.Property<int>("DistributionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistributionID"));
+
+                    b.Property<int>("CrisisID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResourceID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DistributionID");
+
+                    b.HasIndex("CrisisID");
+
+                    b.HasIndex("ResourceID");
+
+                    b.ToTable("Distributions");
+                });
+
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.Donation", b =>
                 {
                     b.Property<int>("DonationID")
@@ -83,6 +109,56 @@ namespace DisasterAlleviationFoundation.Migrations
                     b.ToTable("Donations");
                 });
 
+            modelBuilder.Entity("DisasterAlleviationFoundation.Models.IncidentReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("DisasterType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ReportedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ReporterEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("IncidentReports");
+                });
+
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.Resource", b =>
                 {
                     b.Property<int>("ResourceID")
@@ -91,9 +167,21 @@ namespace DisasterAlleviationFoundation.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResourceID"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DonorName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -116,10 +204,13 @@ namespace DisasterAlleviationFoundation.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("VolunteerID")
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("VolunteerID")
                         .HasColumnType("int");
 
                     b.HasKey("TaskID");
@@ -216,6 +307,13 @@ namespace DisasterAlleviationFoundation.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VolunteerID"));
 
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Skills")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("UserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -226,40 +324,6 @@ namespace DisasterAlleviationFoundation.Migrations
                         .IsUnique();
 
                     b.ToTable("Volunteers");
-                });
-
-            modelBuilder.Entity("Distribution", b =>
-                {
-                    b.Property<int>("DistributionID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistributionID"));
-
-                    b.Property<int>("CrisisID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DonationID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResourceID")
-                        .HasColumnType("int");
-
-                    b.HasKey("DistributionID");
-
-                    b.HasIndex("CrisisID");
-
-                    b.HasIndex("DonationID");
-
-                    b.HasIndex("ResourceID");
-
-                    b.ToTable("Distributions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -395,6 +459,25 @@ namespace DisasterAlleviationFoundation.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DisasterAlleviationFoundation.Models.Distribution", b =>
+                {
+                    b.HasOne("DisasterAlleviationFoundation.Models.Crisis", "Crisis")
+                        .WithMany("Distributions")
+                        .HasForeignKey("CrisisID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DisasterAlleviationFoundation.Models.Resource", "Resource")
+                        .WithMany()
+                        .HasForeignKey("ResourceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crisis");
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.Donation", b =>
                 {
                     b.HasOne("DisasterAlleviationFoundation.Models.Resource", "Resource")
@@ -412,19 +495,29 @@ namespace DisasterAlleviationFoundation.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DisasterAlleviationFoundation.Models.IncidentReport", b =>
+                {
+                    b.HasOne("DisasterAlleviationFoundation.Models.User", "User")
+                        .WithMany("IncidentReports")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.TaskEntity", b =>
                 {
                     b.HasOne("DisasterAlleviationFoundation.Models.Crisis", "Crisis")
                         .WithMany("Tasks")
                         .HasForeignKey("CrisisID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DisasterAlleviationFoundation.Models.Volunteer", "Volunteer")
                         .WithMany("Tasks")
                         .HasForeignKey("VolunteerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Crisis");
 
@@ -440,31 +533,6 @@ namespace DisasterAlleviationFoundation.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Distribution", b =>
-                {
-                    b.HasOne("DisasterAlleviationFoundation.Models.Crisis", "Crisis")
-                        .WithMany()
-                        .HasForeignKey("CrisisID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DisasterAlleviationFoundation.Models.Donation", "Donation")
-                        .WithMany()
-                        .HasForeignKey("DonationID");
-
-                    b.HasOne("DisasterAlleviationFoundation.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Crisis");
-
-                    b.Navigation("Donation");
-
-                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -520,12 +588,16 @@ namespace DisasterAlleviationFoundation.Migrations
 
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.Crisis", b =>
                 {
+                    b.Navigation("Distributions");
+
                     b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("DisasterAlleviationFoundation.Models.User", b =>
                 {
                     b.Navigation("Donations");
+
+                    b.Navigation("IncidentReports");
 
                     b.Navigation("Volunteer")
                         .IsRequired();
