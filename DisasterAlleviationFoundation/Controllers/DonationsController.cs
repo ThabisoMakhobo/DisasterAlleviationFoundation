@@ -18,7 +18,6 @@ namespace DisasterAlleviationFoundation.Controllers
             _context = context;
             _userManager = userManager;
         }
-
         // GET: Donations
         public async Task<IActionResult> Index()
         {

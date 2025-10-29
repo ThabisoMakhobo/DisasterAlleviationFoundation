@@ -28,12 +28,6 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(users);
         }
 
-        // GET: Volunteers/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Volunteers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
