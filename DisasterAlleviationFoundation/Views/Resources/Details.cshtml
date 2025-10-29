@@ -1,0 +1,32 @@
+﻿@model DisasterAlleviationFoundation.Models.Resource
+
+@{
+    ViewData["Title"] = "Resource Details";
+}
+
+<h2>Resource Details</h2>
+<hr />
+
+<div class="card p-3">
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">@Model.Category</dd>
+
+        <dt class="col-sm-3">Quantity</dt>
+        <dd class="col-sm-9">@Model.Quantity</dd>
+
+        <dt class="col-sm-3">Date Added</dt>
+        <dd class="col-sm-9">@Model.DateAdded.ToString("dd MMM yyyy")</dd>
+
+        <dt class="col-sm-3">Donor Name</dt>
+        <dd class="col-sm-9">@Model.DonorName</dd>
+    </dl>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.ResourceID" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

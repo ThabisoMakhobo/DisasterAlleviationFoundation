@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DisasterAlleviationFoundation.Models.Resource>
+
+@{
+    ViewData["Title"] = "Resources";
+}
+
+<h2 class="mb-3">All Resources</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Resource</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Date Added</th>
+            <th>Donor Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.Quantity</td>
+                <td>@item.DateAdded.ToShortDateString()</td>
+                <td>@item.DonorName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ResourceID" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.ResourceID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.ResourceID" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
