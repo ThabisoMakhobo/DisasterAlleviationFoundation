@@ -1,5 +1,8 @@
 ﻿using DisasterAlleviationFoundation.Data;
 using DisasterAlleviationFoundation.Models;
+=========
+using Microsoft.AspNetCore.Identity;
+>>>>>>>>> Temporary merge branch 2
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -10,10 +13,12 @@ namespace DisasterAlleviationFoundation.Controllers
     public class CrisesController : Controller
     {
         private readonly GiftOfTheGiversDbContext _context;
+        private readonly UserManager<User> _userManager;
 
         public CrisesController(GiftOfTheGiversDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Crises

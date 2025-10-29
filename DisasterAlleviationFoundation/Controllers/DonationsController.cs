@@ -13,7 +13,6 @@ namespace DisasterAlleviationFoundation.Controllers
         private readonly GiftOfTheGiversDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public DonationsController(GiftOfTheGiversDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
