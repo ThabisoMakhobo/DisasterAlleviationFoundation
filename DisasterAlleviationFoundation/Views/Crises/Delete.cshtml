@@ -1,22 +1,17 @@
 ﻿@model DisasterAlleviationFoundation.Models.Crisis
-
 @{
     ViewData["Title"] = "Delete Crisis";
 }
 
 <h2>Delete Crisis</h2>
-
-<h4>Are you sure you want to delete this?</h4>
+<p>Are you sure you want to delete this crisis?</p>
 
 <div>
-    <strong>Type:</strong> @Model.Type <br />
-    <strong>Location:</strong> @Model.Location <br />
-    <strong>Date:</strong> @Model.Date.ToShortDateString() <br />
-    <strong>Status:</strong> @Model.Status
+    <strong>@Model.Type</strong> - @Model.Location on @Model.Date.ToShortDateString()
 </div>
 
 <form asp-action="Delete">
     <input type="hidden" asp-for="CrisisID" />
-    <button type="submit" class="btn btn-danger">Delete</button>
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>

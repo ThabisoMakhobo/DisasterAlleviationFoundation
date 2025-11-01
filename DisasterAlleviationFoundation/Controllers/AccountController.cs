@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DisasterAlleviationFoundation.Controllers
 {
@@ -27,34 +28,43 @@ namespace DisasterAlleviationFoundation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new User
             {
-                var user = new User
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Name = model.Name,
-                    Skills = model.Skills
-                };
+                UserName = model.Email,
+                Email = model.Email,
+                Name = model.Name,
+                Skills = model.Skills
+            };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    if (!await _roleManager.RoleExistsAsync(model.Role))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(model.Role));
-                    }
-
-                    await _userManager.AddToRoleAsync(user, model.Role);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
                 foreach (var error in result.Errors)
                     ModelState.AddModelError("", error.Description);
+                return View(model);
             }
-            return View(model);
+
+            // Ensure roles exist
+            if (!await _roleManager.RoleExistsAsync("Admin"))
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            if (!await _roleManager.RoleExistsAsync("User"))
+                await _roleManager.CreateAsync(new IdentityRole("User"));
+
+            // Assign role: first user -> Admin, others -> User
+            var isFirstUser = !_userManager.Users.Any(); // checks existing users in DB
+            var assignedRole = isFirstUser ? "Admin" : "User";
+
+            await _userManager.AddToRoleAsync(user, assignedRole);
+
+            // Optional: store role in User entity if you have a Role property
+            user.Role = assignedRole;
+            await _userManager.UpdateAsync(user);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

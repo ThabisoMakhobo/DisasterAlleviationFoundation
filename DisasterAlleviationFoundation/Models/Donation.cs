@@ -9,16 +9,17 @@ namespace DisasterAlleviationFoundation.Models
         [Key]
         public int DonationID { get; set; }
 
-        [Required]
-        public string UserID { get; set; } // FK to User
+        // This will be assigned automatically in the controller, so do NOT mark it [Required]
+        public string? UserID { get; set; }
 
         [ForeignKey("UserID")]
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
 
-        public int? ResourceID { get; set; } // optional FK to Resource
+        // Optional foreign key
+        public int? ResourceID { get; set; }
 
         [ForeignKey("ResourceID")]
-        public virtual Resource Resource { get; set; }
+        public virtual Resource? Resource { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
@@ -26,6 +27,6 @@ namespace DisasterAlleviationFoundation.Models
 
         public DateTime Date { get; set; } = DateTime.Now;
 
-        public string DonorName { get; set; } // optional for external donors
+        public string? DonorName { get; set; }
     }
 }

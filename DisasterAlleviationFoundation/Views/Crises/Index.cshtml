@@ -1,36 +1,42 @@
 ﻿@model IEnumerable<DisasterAlleviationFoundation.Models.Crisis>
 
 @{
-    ViewData["Title"] = "Crises";
+    ViewData["Title"] = "Crises List";
 }
 
-<h2>Crises List</h2>
+<h2>Crises</h2>
+<hr />
+
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add New Crisis</a>
+    <a asp-action="Create" class="btn btn-primary">Create New Crisis</a>
 </p>
 
-<table class="table table-bordered">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Type</th>
             <th>Location</th>
-            <th>Date</th>
+            <th>Date Reported</th>
             <th>Status</th>
+            <th>Resource</th>
+            <th>Donation</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var crisis in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@crisis.Type</td>
-                <td>@crisis.Location</td>
-                <td>@crisis.Date.ToShortDateString()</td>
-                <td>@crisis.Status</td>
+                <td>@item.Type</td>
+                <td>@item.Location</td>
+                <td>@item.Date.ToShortDateString()</td>
+                <td>@item.Status</td>
+                <td>@(item.Resource?.Name ?? "N/A")</td>
+                <td>@(item.Donation?.DonorName ?? "N/A")</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@crisis.CrisisID" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Details" asp-route-id="@crisis.CrisisID" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Delete" asp-route-id="@crisis.CrisisID" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.CrisisID" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.CrisisID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.CrisisID" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }

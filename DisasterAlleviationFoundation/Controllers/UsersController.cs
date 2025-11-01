@@ -2,12 +2,14 @@
 using DisasterAlleviationFoundation.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DisasterAlleviationFoundation.Controllers
 {
+    [Authorize(Roles = "Admin")] // Only Admins can access UsersController
     public class UsersController : Controller
     {
         private readonly GiftOfTheGiversDbContext _context;
@@ -19,12 +21,14 @@ namespace DisasterAlleviationFoundation.Controllers
             _userManager = userManager;
         }
 
+        // GET: Users
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
             return View(users);
         }
 
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
@@ -35,6 +39,7 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(user);
         }
 
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
@@ -46,13 +51,15 @@ namespace DisasterAlleviationFoundation.Controllers
             {
                 Name = user.Name,
                 Email = user.Email,
-                Role = user.Role,
-                Skills = user.Skills
+                Skills = user.Skills,
+                // Optionally include Role dropdown if you want Admin to change roles
+                Role = user.Role
             };
 
             return View(model);
         }
 
+        // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, RegisterViewModel model)
@@ -67,7 +74,19 @@ namespace DisasterAlleviationFoundation.Controllers
             user.Email = model.Email;
             user.UserName = model.Email;
             user.Skills = model.Skills;
-            user.Role = model.Role;
+
+            // Update role only if Admin is editing
+            if (!string.IsNullOrEmpty(model.Role) && model.Role != user.Role)
+            {
+                // Remove old role
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+                // Add new role
+                await _userManager.AddToRoleAsync(user, model.Role);
+
+                user.Role = model.Role;
+            }
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -80,6 +99,7 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(model);
         }
 
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
@@ -90,6 +110,7 @@ namespace DisasterAlleviationFoundation.Controllers
             return View(user);
         }
 
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)

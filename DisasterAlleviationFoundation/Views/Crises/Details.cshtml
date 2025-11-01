@@ -4,15 +4,66 @@
     ViewData["Title"] = "Crisis Details";
 }
 
-<h2>@Model.Type - Details</h2>
+<h2>Crisis Details</h2>
+<hr />
 
-<div>
-    <strong>Location:</strong> @Model.Location <br />
-    <strong>Date:</strong> @Model.Date.ToShortDateString() <br />
-    <strong>Status:</strong> @Model.Status
+<div class="mb-3">
+    <dl class="row">
+        <dt class="col-sm-3">Crisis Type</dt>
+        <dd class="col-sm-9">@Model.Type</dd>
+
+        <dt class="col-sm-3">Location</dt>
+        <dd class="col-sm-9">@Model.Location</dd>
+
+        <dt class="col-sm-3">Date Reported</dt>
+        <dd class="col-sm-9">@Model.Date.ToShortDateString()</dd>
+
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+
+        <dt class="col-sm-3">Linked Resource</dt>
+        <dd class="col-sm-9">@Model.Resource?.Name ?? "N/A"</dd>
+
+        <dt class="col-sm-3">Linked Donation</dt>
+        <dd class="col-sm-9">@Model.Donation?.DonorName ?? "N/A"</dd>
+
+        <dt class="col-sm-3">Tasks</dt>
+        <dd class="col-sm-9">
+            @if (Model.Tasks != null && Model.Tasks.Any())
+            {
+                <ul>
+                    @foreach (var task in Model.Tasks)
+                    {
+                        <li>@task.Description (@(task.IsCompleted ? "Completed" : "Pending"))</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>No tasks assigned</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Distributions</dt>
+        <dd class="col-sm-9">
+            @if (Model.Distributions != null && Model.Distributions.Any())
+            {
+                <ul>
+                    @foreach (var dist in Model.Distributions)
+                    {
+                        <li>@dist.Resource.Name - Quantity: @dist.Quantity</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>No distributions</span>
+            }
+        </dd>
+    </dl>
 </div>
 
 <p>
     <a asp-action="Edit" asp-route-id="@Model.CrisisID" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </p>

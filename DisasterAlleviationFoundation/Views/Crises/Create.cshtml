@@ -4,33 +4,52 @@
     ViewData["Title"] = "Create Crisis";
 }
 
-<h2>Add New Crisis</h2>
+<h2>Create Crisis</h2>
+<hr />
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label>Type</label>
+<form asp-action="Create" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="Type"></label>
         <input asp-for="Type" class="form-control" />
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label>Location</label>
+    <div class="form-group mb-3">
+        <label asp-for="Location"></label>
         <input asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label>Date</label>
-        <input asp-for="Date" type="date" class="form-control" />
+    <div class="form-group mb-3">
+        <label asp-for="Date"></label>
+        <input asp-for="Date" class="form-control" type="date" />
         <span asp-validation-for="Date" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label>Status</label>
+    <div class="form-group mb-3">
+        <label asp-for="Status"></label>
         <input asp-for="Status" class="form-control" />
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+    <div class="form-group mb-3">
+        <label asp-for="ResourceID">Linked Resource (Optional)</label>
+        <select asp-for="ResourceID" class="form-select" asp-items="ViewBag.Resources">
+            <option value="">-- Select Resource --</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DonationID">Linked Donation (Optional)</label>
+        <select asp-for="DonationID" class="form-select" asp-items="ViewBag.Donations">
+            <option value="">-- Select Donation --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
