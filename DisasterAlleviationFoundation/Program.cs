@@ -52,3 +52,6 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+// 👇 Add this line
+public partial class Program { }
