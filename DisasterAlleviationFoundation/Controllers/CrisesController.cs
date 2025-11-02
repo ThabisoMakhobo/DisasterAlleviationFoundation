@@ -58,8 +58,14 @@ namespace DisasterAlleviationFoundation.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                              .Select(e => e.ErrorMessage)
+                                              .ToList();
+
+                Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+
                 ViewBag.Resources = new SelectList(_context.Resources, "ResourceID", "Name");
-                ViewBag.Donations = new SelectList(_context.Donations, "DonationID", "DonorName");
+                ViewBag.Donations = new SelectList(_context.Donations, "DonationID", "Description");
                 return View(crisis);
             }
 
@@ -67,6 +73,7 @@ namespace DisasterAlleviationFoundation.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Crises/Edit/5
         public async Task<IActionResult> Edit(int id)

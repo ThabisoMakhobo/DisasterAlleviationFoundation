@@ -28,5 +28,6 @@ namespace DisasterAlleviationFoundation.Models
         public DateTime Date { get; set; } = DateTime.Now;
 
         public string? DonorName { get; set; }
+       
     }
 }
