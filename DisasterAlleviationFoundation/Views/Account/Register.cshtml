@@ -16,36 +16,37 @@
                     <!-- Name -->
                     <div class="mb-3">
                         <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" class="form-control" />
+                        <input asp-for="Name" class="form-control" autocomplete="name" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
                     <!-- Email -->
                     <div class="mb-3">
                         <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" class="form-control" autocomplete="email" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <!-- Password -->
                     <div class="mb-3">
                         <label asp-for="Password" class="form-label"></label>
-                        <input asp-for="Password" class="form-control" type="password" />
+                        <input asp-for="Password" class="form-control" type="password" autocomplete="new-password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
                     <!-- Confirm Password -->
                     <div class="mb-3">
                         <label asp-for="ConfirmPassword" class="form-label"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                        <input asp-for="ConfirmPassword" class="form-control" type="password" autocomplete="new-password" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
 
-                    <!-- Role Dropdown -->
+                    <!-- Role -->
                     <div class="mb-3">
                         <label asp-for="Role" class="form-label"></label>
                         <select asp-for="Role" class="form-select">
                             <option value="">-- Select a Role --</option>
+                            <option value="User">User</option>
                             <option value="Volunteer">Volunteer</option>
                             <option value="Donor">Donor</option>
                             <option value="Admin">Admin</option>
@@ -53,12 +54,12 @@
                         <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
 
-                    <!-- Skills (only for volunteers, optional) -->
+                    <!-- Skills (optional for volunteers) -->
                     <div class="mb-3">
                         <label asp-for="Skills" class="form-label"></label>
                         <input asp-for="Skills" class="form-control" placeholder="E.g. First Aid, Logistics" />
                         <span asp-validation-for="Skills" class="text-danger"></span>
-                        <small class="form-text text-muted">* Optional, mainly for Volunteers</small>
+                        <small class="form-text text-muted">Optional, mainly for volunteers</small>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Register</button>

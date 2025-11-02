@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace DisasterAlleviationFoundation.Controllers
 {
@@ -47,20 +46,18 @@ namespace DisasterAlleviationFoundation.Controllers
                 return View(model);
             }
 
-            // Ensure roles exist
+            // Ensure roles exist in the database
             if (!await _roleManager.RoleExistsAsync("Admin"))
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
             if (!await _roleManager.RoleExistsAsync("User"))
                 await _roleManager.CreateAsync(new IdentityRole("User"));
 
-            // Assign role: first user -> Admin, others -> User
-            var isFirstUser = !_userManager.Users.Any(); // checks existing users in DB
-            var assignedRole = isFirstUser ? "Admin" : "User";
+            // Assign selected role
+            var selectedRole = string.IsNullOrEmpty(model.Role) ? "User" : model.Role;
+            await _userManager.AddToRoleAsync(user, selectedRole);
 
-            await _userManager.AddToRoleAsync(user, assignedRole);
-
-            // Optional: store role in User entity if you have a Role property
-            user.Role = assignedRole;
+            // Store role in user entity if applicable
+            user.Role = selectedRole;
             await _userManager.UpdateAsync(user);
 
             await _signInManager.SignInAsync(user, isPersistent: false);

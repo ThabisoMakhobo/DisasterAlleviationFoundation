@@ -22,7 +22,8 @@ namespace DisasterAlleviationFoundation.Models
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        // Optional: only if you want to allow selecting role in registration
-        public string Role { get; set; } = "User";
+        // Role selected during registration
+        [Required]
+        public string Role { get; set; }
     }
 }
